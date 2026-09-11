@@ -1,0 +1,60 @@
+import java.util.*;
+
+public class Solution {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while (t-- > 0) {
+            String s = sc.next();
+            System.out.println(stringSimilarity(s));
+        }
+        sc.close();
+    }
+
+    static long stringSimilarity(String s) {
+        int n = s.length();
+        int[] Z = new int[n];
+        computeZArray(s, Z);
+
+        long sum = 0;
+        for (int z : Z) {
+            sum += z;
+        }
+        return sum;
+    }
+
+    static void computeZArray(String s, int[] Z) {
+        int n = s.length();
+        int L = 0, R = 0;
+
+        Z[0] = n; // whole string matches itself
+
+        for (int i = 1; i < n; i++) {
+            if (i > R) {
+                L = R = i;
+                while (R < n && s.charAt(R - L) == s.charAt(R)) {
+                    R++;
+                }
+                Z[i] = R - L;
+                R--;
+            } else {
+                int k = i - L;
+                if (Z[k] < R - i + 1) {
+                    Z[i] = Z[k];
+                } else {
+                    L = i;
+                    while (R < n && s.charAt(R - L) == s.charAt(R)) {
+                        R++;
+                    }
+                    Z[i] = R - L;
+                    R--;
+                }
+            }
+        }
+    }
+}
+
+OUTPUT:
+11
+3
